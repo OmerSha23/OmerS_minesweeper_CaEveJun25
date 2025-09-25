@@ -23,73 +23,75 @@ function buildBoard() {
         }
         gBoard.push(row)
     }
-    
+
     console.table(gBoard);
 
 }
-function setMinesNegsCount(board) {
-    // Step 1: Place exactly gLevel.MINES mines randomly
-    let minesToPlace = gLevel.MINES; // e.g., 2
-    const totalCells = gLevel.SIZE * gLevel.SIZE;
-    let minePositions = new Set();
-
-    while (minePositions.size < minesToPlace) {
-        const pos = Math.floor(Math.random() * totalCells);
-        minePositions.add(pos);
-    }
-
-    // Convert positions to board coordinates and set mines
-    for (let pos of minePositions) {
-        const i = Math.floor(pos / gLevel.SIZE);
-        const j = pos % gLevel.SIZE;
-        board[i][j].isMine = true;
-    }
-
-    // Step 2: Count neighbors for each cell
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[0].length; j++) {
-            let minesCount = 0;
-            // Skip if the cell is a mine
-            if (board[i][j].isMine) {
-                board[i][j].minesAroundCount = 0;
-                continue;
-            }
-            // Check all 8 neighboring cells
-            for (let x = i - 1; x <= i + 1; x++) {
-                for (let y = j - 1; y <= j + 1; y++) {
-                    // Skip out-of-bounds cells
-                    if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) continue;
-                    // Skip the cell itself
-                    if (x === i && y === j) continue;
-                    if (board[x][y].isMine) minesCount++;
-                }
-            }
-            board[i][j].minesAroundCount = minesCount;
-        }
-    }
-    return board;
-}
-
 // function setMinesNegsCount(board) {
-//     for (var i = 0; i < board.length; i++) {
-//         for (var j = 0; j < board[0].length; j++) {
-//             var minesCount = 0;
-//             var currCell = board[i][j];
-//             for (var x = i - 1; x <= i + 1; x++) {
-//                 for (var y = j - 1; y <= j + 1; y++) {
+//     // Step 1: Place exactly gLevel.MINES mines randomly
+//     let minesToPlace = gLevel.MINES; // e.g., 2
+//     const totalCells = gLevel.SIZE * gLevel.SIZE;
+//     let minePositions = new Set();
+
+//     while (minePositions.size < minesToPlace) {
+//         const pos = Math.floor(Math.random() * totalCells);
+//         minePositions.add(pos);
+//     }
+
+//     // Convert positions to board coordinates and set mines
+//     for (let pos of minePositions) {
+//         const i = Math.floor(pos / gLevel.SIZE);
+//         const j = pos % gLevel.SIZE;
+//         board[i][j].isMine = true;
+//     }
+
+//     // Step 2: Count neighbors for each cell
+//     for (let i = 0; i < board.length; i++) {
+//         for (let j = 0; j < board[0].length; j++) {
+//             let minesCount = 0;
+//             // Skip if the cell is a mine
+//             if (board[i][j].isMine) {
+//                 board[i][j].minesAroundCount = 0;
+//                 continue;
+//             }
+//             // Check all 8 neighboring cells
+//             for (let x = i - 1; x <= i + 1; x++) {
+//                 for (let y = j - 1; y <= j + 1; y++) {
+//                     // Skip out-of-bounds cells
 //                     if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) continue;
+//                     // Skip the cell itself
 //                     if (x === i && y === j) continue;
 //                     if (board[x][y].isMine) minesCount++;
 //                 }
 //             }
-//             board[i][j].isMine = (Math.random() < gLevel.MINES / (gLevel.SIZE * gLevel.SIZE));
-//             console.log( board[i][j].isMine = (Math.random() < gLevel.MINES / (gLevel.SIZE * gLevel.SIZE))); 
-            
 //             board[i][j].minesAroundCount = minesCount;
 //         }
 //     }
 //     return board;
 // }
+
+
+
+function setMinesNegsCount(board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[0].length; j++) {
+            var minesCount = 0;
+            var currCell = board[i][j];
+            for (var x = i - 1; x <= i + 1; x++) {
+                for (var y = j - 1; y <= j + 1; y++) {
+                    if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) continue;
+                    if (x === i && y === j) continue;
+                    if (board[x][y].isMine) minesCount++;
+                }
+            }
+            board[i][j].isMine = (Math.random() < gLevel.MINES / (gLevel.SIZE * gLevel.SIZE));
+            // console.log( board[i][j].isMine = (Math.random() < gLevel.MINES / (gLevel.SIZE * gLevel.SIZE))); 
+
+            board[i][j].minesAroundCount = minesCount;
+        }
+    }
+    return board;
+}
 
 function renderBoard(board) {
     var strHTML = '<tbody class="board-body">\n';
@@ -112,7 +114,7 @@ function onCellClicked(elCell, i, j) {
         setMinesNegsCount(gBoard);
         gGame.isOn = true;
         console.log(gBoard[i][j]);
-        
+
     }
     gBoard[i][j].isRevealed = true;
     elCell.style.backgroundColor = 'lightgrey';
@@ -144,6 +146,49 @@ function onCellMarked(elCell, i, j, event) {
     }
     checkGameOver();
 }
+
+// function checkGameOver() {
+//     const totalCells = gLevel.SIZE * gLevel.SIZE;
+//     const totalMines = gLevel.MINES;
+//     const revealedCells = gGame.revealedCount;
+//     const markedCells = gGame.markedCount;
+
+//     // Optional: Check for loss if a mine is revealed
+//     for (let i = 0; i < gBoard.length; i++) {
+//         for (let j = 0; j < gBoard[0].length; j++) {
+//             if (gBoard[i][j].isMine && gBoard[i][j].isShown) {
+//                 // If a mine is revealed, the game is lost
+//                 gGame.isOn = false;
+//                 return { status: 'loss', message: 'Game Over! You hit a mine.' };
+//             }
+//         }
+//     }
+
+//     // Check win condition: all non-mine cells revealed and all mines marked
+//     if (revealedCells + markedCells === totalCells) {
+//         let correctlyMarkedMines = 0;
+//         let incorrectMarks = 0;
+
+//         for (let i = 0; i < gBoard.length; i++) {
+//             for (let j = 0; j < gBoard[0].length; j++) {
+//                 if (gBoard[i][j].isMine && gBoard[i][j].isMarked) {
+//                     correctlyMarkedMines++;
+//                 } else if (!gBoard[i][j].isMine && gBoard[i][j].isMarked) {
+//                     incorrectMarks++; // Track if non-mine cells are marked
+//                 }
+//             }
+//         }
+
+//         // Win if all mines are marked and no non-mine cells are marked
+//         if (correctlyMarkedMines === totalMines && incorrectMarks === 0) {
+//             gGame.isOn = false;
+//             return { status: 'win', message: 'You Win!' };
+//         }
+//     }
+
+//     // Game is still ongoing
+//     return { status: 'ongoing', message: '' };
+// }
 
 
 function checkGameOver() {
