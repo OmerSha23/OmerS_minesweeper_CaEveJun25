@@ -43,7 +43,7 @@ background: linear-gradient(45deg, #0095ff7b, #f2ff0067);
 
 footer {
   margin-top: 15px;
-  color: #cd2ddf63;
+  color: #d80fee70;
 }
 
 button {
@@ -52,7 +52,7 @@ button {
 }
 
 #lives {
-  color: black;
+  color: rgb(36, 33, 33);
   padding: 3px;
 }
 
@@ -71,3 +71,4 @@ button {
 .restart-btn:active {
   transform: scale(0.95);
 }
+

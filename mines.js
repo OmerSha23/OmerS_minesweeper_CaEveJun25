@@ -7,7 +7,9 @@ var gGame = {
     revealedCount: 0,
     markedCount: 0,
     lives: 3,
-    startTime: null
+    startTime: null,
+    state: 'NEUTRAL'
+
 };
 var gLevels = {
     BEGINNER: { SIZE: 4, MINES: 2 },
@@ -27,10 +29,12 @@ function onInit(level = 'BEGINNER') {
     gGame.markedCount = 0;
     gGame.lives = 3;
     gGame.startTime = null;
+    gGame.state = 'NEUTRAL'
     clearInterval(gTimerInterval);
     updateLivesDisplay();
     updateTimerDisplay(0);
     renderLevelSelector();
+    updateSmiley()
 }
 
 
@@ -99,6 +103,8 @@ function onCellClicked(elCell, i, j) {
         updateLivesDisplay();
         if (gGame.lives === 0) {
             console.log('Game Over');
+            gGame.state = 'LOSS'
+            updateSmiley()
             revealAllMines();
             gGame.isOn = false;
             stopTimer();
@@ -113,6 +119,8 @@ function onCellClicked(elCell, i, j) {
     if (gBoard[i][j].minesAroundCount === 0) {
         expandReveal(gBoard, i, j);
     }
+    console.log(gBoard[i][j] );
+    
 
     checkGameOver();
 }
@@ -137,6 +145,8 @@ function checkGameOver() {
     const totalSafeCells = gLevel.SIZE * gLevel.SIZE - gLevel.MINES;
     if (gGame.revealedCount === totalSafeCells) {
         alert('You Win!');
+        gGame.state = 'WIN'
+        updateSmiley()
         revealAllMines()
         gGame.isOn = false;
         stopTimer();
@@ -206,3 +216,20 @@ function updateLivesDisplay() {
     const elLives = document.querySelector('#lives');
     if (elLives) elLives.innerText = `Lives: ${gGame.lives}`;
 }
+
+function updateSmiley() {
+    const elSmiley = document.querySelector('.restart-btn');
+    if (elSmiley) {
+        switch (gGame.state) {
+            case 'WIN':
+                elSmiley.innerText = '😎';
+                break;
+            case 'LOSS':
+                elSmiley.innerText = '😢';
+                break;
+            default:
+                elSmiley.innerText = '😊';
+        }
+    }
+}
+
