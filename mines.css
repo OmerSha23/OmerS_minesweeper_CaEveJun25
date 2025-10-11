@@ -45,6 +45,7 @@ background: linear-gradient(45deg, #0095ff7b, #f2ff0067);
 footer {
   margin-top: 15px;
   color: #d80fee70;
+  text-shadow: 2px 2px 5px white;
 }
 
 button {
