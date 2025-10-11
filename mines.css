@@ -16,6 +16,7 @@ background: linear-gradient(45deg, #0095ff7b, #f2ff0067);
   color: rgb(212, 92, 190);
   border-radius: 10px;
   display: inline-block;
+  word-spacing: 2px
 }
 
 .board {
